@@ -18,8 +18,8 @@
     {
       "name": "addInspiration",
       "title": "Add Cool Site",
-      "subtitle": "Add a cool site to vogelino's portfolio \"inspirations\" page.",
-      "description": "Add a cool site to vogelino's portfolio \"inspirations\" page by providing an URL, Name and list of coma-separated tags.",
+      "subtitle": "Add a cool site to vogelino's portfolio.",
+      "description": "Add a cool site to vogelino's portfolio by providing an URL, Name and a list of coma-separated tags.",
       "mode": "view",
       "icon": "add-command.png"
     },

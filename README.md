@@ -1,3 +1,3 @@
-# Add Vogelino Inspiration
+# Vogelino Utils
 
-Add a inspiration item to vogelino's portfolio "inspirations" page.
+Add a cool site to vogelino's portfolio by providing an URL, Name and a list of coma-separated tags.

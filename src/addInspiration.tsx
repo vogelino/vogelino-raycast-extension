@@ -15,7 +15,7 @@ export default function Command() {
         <ActionPanel>
           <Action.SubmitForm onSubmit={handleSubmit} icon={Icon.Check} />
           <Action.Push
-            title="See All Inspirations"
+            title="See All Cool Sites"
             icon={Icon.List}
             shortcut={{ modifiers: ["cmd"], key: "l" }}
             target={<ListInspirationsCommand />}
@@ -24,9 +24,9 @@ export default function Command() {
         </ActionPanel>
       }
     >
-      <Form.TextField id="name" title="Name" placeholder="Enter the inspiration name" />
-      <Form.TextField id="url" title="URL" placeholder="Enter the inspiration URL" />
-      <Form.TagPicker id="tags" title="Tags" placeholder="Enter the inspiration tags">
+      <Form.TextField id="name" title="Name" placeholder="Enter the Cool Site Name" />
+      <Form.TextField id="url" title="URL" placeholder="Enter the Cool Site URL" />
+      <Form.TagPicker id="tags" title="Tags" placeholder="Enter the Cool Site Tags">
         {tags.map((tag) => (
           <Form.TagPicker.Item key={tag} value={tag} title={tag} />
         ))}
@@ -40,24 +40,24 @@ async function handleSubmit(values: InspirationInsertType) {
 
   const toast = await showToast({
     style: Toast.Style.Animated,
-    title: `Adding inspiration: ${parsedValues.name}`,
+    title: `Adding Cool Site: ${parsedValues.name}`,
   });
   try {
     const response = await addInspiration(parsedValues);
 
     if (response.status !== 204) {
       toast.style = Toast.Style.Failure;
-      toast.title = `Failed to add inspiration: ${parsedValues.name}`;
+      toast.title = `Failed to Add Cool Site: ${parsedValues.name}`;
       toast.message = response.statusText;
     }
 
-    showToast({ title: `Inspiration added: ${parsedValues.name}` });
+    showToast({ title: `Cool Site Added: ${parsedValues.name}` });
     toast.style = Toast.Style.Success;
-    toast.title = `Inspiration added: ${parsedValues.name}`;
+    toast.title = `Cool Site Added: ${parsedValues.name}`;
   } catch (error) {
     console.error(error);
     toast.style = Toast.Style.Failure;
-    toast.title = `Failed to add inspiration: ${parsedValues.name}`;
+    toast.title = `Failed to Add Cool Site: ${parsedValues.name}`;
     toast.message = (error as Error).message;
   }
 }
