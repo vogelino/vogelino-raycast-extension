@@ -1,6 +1,6 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "add-inpsiration-raycast-plugin",
+  "name": "vogelino-extension",
   "title": "Vogelino Utils",
   "description": "Utilities to see and add cool sites to vogelino's portfolio.",
   "icon": "extension-icon.png",
