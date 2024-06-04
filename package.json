@@ -1,9 +1,9 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "add-vogelino-inspiration",
-  "title": "Add Vogelino Inspiration",
-  "description": "Add a inspiration item to vogelino's portfolio \"inspirations\" page.",
-  "icon": "command-icon.png",
+  "name": "add-inpsiration-raycast-plugin",
+  "title": "Vogelino Utils",
+  "description": "Utilities to see and add cool sites to vogelino's portfolio.",
+  "icon": "extension-icon.png",
   "author": "vogelino",
   "owner": "vogelino-spa",
   "categories": [
@@ -16,15 +16,37 @@
   "license": "MIT",
   "commands": [
     {
+      "name": "addInspiration",
+      "title": "Add Cool Site",
+      "subtitle": "Add a cool site to vogelino's portfolio \"inspirations\" page.",
+      "description": "Add a cool site to vogelino's portfolio \"inspirations\" page by providing an URL, Name and list of coma-separated tags.",
+      "mode": "view",
+      "icon": "add-command.png"
+    },
+    {
       "name": "index",
-      "title": "Add inspiration",
-      "subtitle": "Add a inspiration item to vogelino's portfolio \"inspirations\" page.",
-      "description": "Add a inspiration item to vogelino's portfolio \"inspirations\" page by providing an URL, Name and list of coma-separated tags.",
-      "mode": "view"
+      "title": "Search/List Cool Sites",
+      "subtitle": "List and search throught vogelino's portfolio Cool Sites.",
+      "description": "List and search throught vogelino's portfolio Cool Sites.",
+      "mode": "view",
+      "icon": "list-command.png"
+    }
+  ],
+  "preferences": [
+    {
+      "name": "githubAuthToken",
+      "title": "GitHub Auth Token",
+      "description": "Get your Auth Token here https://github.com/settings/tokens",
+      "type": "password",
+      "required": true
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.75.2"
+    "@raycast/api": "^1.75.2",
+    "@raycast/utils": "1.15.0",
+    "axios": "1.7.2",
+    "dotenv": "16.4.5",
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^1.0.6",
