@@ -7,7 +7,7 @@ export function getArcTabUrlAndTitle(): Promise<{ tabURL: string; tabTitle: stri
       (error, stdout) => {
         if (error) return reject(error);
         const [tabURL, tabTitle] = stdout.trim().split(",");
-        return resolve({ tabURL, tabTitle });
+        return resolve({ tabURL: tabURL.trim(), tabTitle: tabTitle.trim() });
       },
     );
   });
