@@ -14,7 +14,16 @@ export function useInspirations() {
   useEffect(() => {
     if (!data) return;
     try {
-      const insps = inspirationSchema.array().parse(data);
+      const insps = Array.from(
+        inspirationSchema
+          .array()
+          .parse(data)
+          .reduce((acc, insp) => {
+            acc.set(insp.id, insp);
+            return acc;
+          }, new Map<string, InspirationType>())
+          .values(),
+      );
       const tags = Array.from(new Set<string>(insps.flatMap((i) => i.tags)));
       setTags(tags);
       setInspirations(insps);
