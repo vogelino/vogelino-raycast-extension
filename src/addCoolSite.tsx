@@ -1,16 +1,16 @@
 import { Action, ActionPanel, Form, Icon, Toast, showToast } from "@raycast/api";
 import dotenv from "dotenv";
 import { useEffect, useState } from "react";
-import ListInspirationsCommand from "./index";
-import { addInspiration } from "./utils/addInspiration";
+import ListCoolSitesCommand from "./index";
+import { addCoolSite } from "./utils/addCoolSite";
 import CommonActions from "./utils/commonActions";
+import { CoolSiteInsertType, coolSiteInsertSchema } from "./utils/coolSiteTypesAndSchemas";
 import { getArcTabUrlAndTitle } from "./utils/getArcTabUrlAndTitle";
-import { InspirationInsertType, inspirationInsertSchema } from "./utils/inspirationTypesAndSchemas";
-import { useInspirations } from "./utils/useInspirations";
+import { useCoolSites } from "./utils/useCoolSites";
 dotenv.config();
 
 export default function Command() {
-  const { tags } = useInspirations();
+  const { tags } = useCoolSites();
   const [url, setUrl] = useState<string>("");
   const [name, setName] = useState<string>("");
 
@@ -19,7 +19,7 @@ export default function Command() {
       if (tabURL) setUrl(tabURL);
       if (tabTitle) setName(tabTitle);
     });
-  }, [])
+  }, []);
 
   return (
     <Form
@@ -30,14 +30,26 @@ export default function Command() {
             title="See All Cool Sites"
             icon={Icon.List}
             shortcut={{ modifiers: ["cmd"], key: "l" }}
-            target={<ListInspirationsCommand />}
+            target={<ListCoolSitesCommand />}
           />
           <CommonActions />
         </ActionPanel>
       }
     >
-      <Form.TextField id="name" title="Name" placeholder="Enter the Cool Site Name" value={name} onChange={(value) => setName(value)} />
-      <Form.TextField id="url" title="URL" placeholder="Enter the Cool Site URL" value={url} onChange={(value) => setUrl(value)} />
+      <Form.TextField
+        id="name"
+        title="Name"
+        placeholder="Enter the Cool Site Name"
+        value={name}
+        onChange={(value) => setName(value)}
+      />
+      <Form.TextField
+        id="url"
+        title="URL"
+        placeholder="Enter the Cool Site URL"
+        value={url}
+        onChange={(value) => setUrl(value)}
+      />
       <Form.TagPicker id="tags" title="Tags" placeholder="Enter the Cool Site Tags">
         {tags.map((tag) => (
           <Form.TagPicker.Item key={tag} value={tag} title={tag} />
@@ -47,15 +59,15 @@ export default function Command() {
   );
 }
 
-async function handleSubmit(values: InspirationInsertType) {
-  const parsedValues = inspirationInsertSchema.parse(values);
+async function handleSubmit(values: CoolSiteInsertType) {
+  const parsedValues = coolSiteInsertSchema.parse(values);
 
   const toast = await showToast({
     style: Toast.Style.Animated,
     title: `Adding Cool Site: ${parsedValues.name}`,
   });
   try {
-    const response = await addInspiration(parsedValues);
+    const response = await addCoolSite(parsedValues);
 
     if (response.status !== 204) {
       toast.style = Toast.Style.Failure;

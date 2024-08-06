@@ -16,7 +16,7 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "addInspiration",
+      "name": "addCoolSite",
       "title": "Add Cool Site",
       "subtitle": "Add a cool site to vogelino's portfolio.",
       "description": "Add a cool site to vogelino's portfolio by providing an URL, Name and a list of coma-separated tags.",

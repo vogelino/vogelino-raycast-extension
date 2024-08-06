@@ -1,14 +1,14 @@
 import { getPreferenceValues } from "@raycast/api";
 import axios from "axios";
-import { InspirationInsertType } from "./inspirationTypesAndSchemas";
+import { CoolSiteInsertType } from "./coolSiteTypesAndSchemas";
 
 const { githubAuthToken } = getPreferenceValues<Preferences>();
 
-export async function addInspiration(values: InspirationInsertType) {
+export async function addCoolSite(values: CoolSiteInsertType) {
   return axios.post(
     "https://api.github.com/repos/vogelino/vogelino/dispatches",
     {
-      event_type: "update-inspirations",
+      event_type: "update-cool-site",
       client_payload: values,
     },
     {

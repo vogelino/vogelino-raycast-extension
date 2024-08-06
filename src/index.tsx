@@ -3,11 +3,11 @@ import dotenv from "dotenv";
 import { useState } from "react";
 import CommonActions from "./utils/commonActions";
 import ItemActions from "./utils/itemActions";
-import { useInspirations } from "./utils/useInspirations";
+import { useCoolSites } from "./utils/useCoolSites";
 dotenv.config();
 
 export default function Command() {
-  const { inspirations, tags, isLoading } = useInspirations();
+  const { coolSites, tags, isLoading } = useCoolSites();
   const [tag, setTag] = useState<string | null>(null);
   return (
     <Grid
@@ -18,11 +18,7 @@ export default function Command() {
       fit={Grid.Fit.Fill}
       columns={4}
       searchBarAccessory={
-        <Grid.Dropdown
-          tooltip="Filter by tag"
-          onChange={(newValue) => setTag(newValue || null)}
-          value={tag || ""}
-        >
+        <Grid.Dropdown tooltip="Filter by tag" onChange={(newValue) => setTag(newValue || null)} value={tag || ""}>
           <Grid.Dropdown.Item title="All tags" value={""} />
           {tags.map((tag) => (
             <Grid.Dropdown.Item key={tag} title={tag} value={tag} />
@@ -30,7 +26,7 @@ export default function Command() {
         </Grid.Dropdown>
       }
     >
-      {inspirations
+      {coolSites
         ?.filter((item) => (!tag ? true : item.tags.includes(tag)))
         .map((item) => (
           <Grid.Item
@@ -38,13 +34,17 @@ export default function Command() {
             // icon={item.favicon || `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=24&url=${item.url}`}
             title={item.title}
             content={{
-              source: item.favicon || `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=24&url=${item.url}`,
+              source:
+                item.favicon ||
+                `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=24&url=${item.url}`,
               value: item.thumbnail || "",
               tooltip: item.tags.join(", "),
             }}
             subtitle={new URL(item.url).hostname}
             accessory={{
-              icon: item.favicon || `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=24&url=${item.url}`,
+              icon:
+                item.favicon ||
+                `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=24&url=${item.url}`,
             }}
             actions={
               <ActionPanel>

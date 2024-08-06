@@ -1,45 +1,45 @@
 import { Action, ActionPanel, Icon } from "@raycast/api";
-import AddInspirationCommand from "../addInspiration";
-import ViewInspiration from "../viewInspiration";
-import { InspirationType } from "./inspirationTypesAndSchemas";
+import AddCoolSiteCommand from "../addCoolSite";
+import ViewCoolSite from "../viewCoolSite";
+import { CoolSiteType } from "./coolSiteTypesAndSchemas";
 
 function ItemActions({
   item,
-  showAddInspirationCommand = true,
-  showViewInspirationCommand = true,
+  showAddCoolSiteCommand = true,
+  showViewCoolSiteCommand = true,
 }: {
-  item: InspirationType;
-  showViewInspirationCommand?: boolean;
-  showAddInspirationCommand?: boolean;
+  item: CoolSiteType;
+  showViewCoolSiteCommand?: boolean;
+  showAddCoolSiteCommand?: boolean;
 }) {
   return (
     <ActionPanel.Section title="Item Actions">
-      {showViewInspirationCommand && (
-        <Action.Push
-          title="View Cool Site"
-          icon={{ source: Icon.Eye }}
-          target={<ViewInspiration {...item} />}
-        />
+      {showViewCoolSiteCommand && (
+        <Action.Push title="View Cool Site" icon={{ source: Icon.Eye }} target={<ViewCoolSite {...item} />} />
       )}
-      {showAddInspirationCommand && (
+      {showAddCoolSiteCommand && (
         <Action.Push
           title="Add Cool Site"
           icon={{ source: Icon.Plus }}
           shortcut={{ modifiers: ["cmd"], key: "n" }}
-          target={<AddInspirationCommand />}
+          target={<AddCoolSiteCommand />}
         />
       )}
       <Action.OpenInBrowser url={item.url} title="Open External Link" shortcut={{ modifiers: ["opt"], key: "enter" }} />
-      <Action.CopyToClipboard title="Copy External Link" content={item.url} shortcut={{ modifiers: ["opt", "shift"], key: "enter" }} />
+      <Action.CopyToClipboard
+        title="Copy External Link"
+        content={item.url}
+        shortcut={{ modifiers: ["opt", "shift"], key: "enter" }}
+      />
       <Action.OpenInBrowser
-        url={`https://vogelino.com/inspirations/${item.id}`}
+        url={`https://vogelino.com/cool-sites/${item.id}`}
         title="Open in Portfolio"
         icon={`https://vogelino.com/favicon-32x32.png`}
         shortcut={{ modifiers: ["shift"], key: "enter" }}
       />
       <Action.CopyToClipboard
         title="Copy Portfolio Link"
-        content={`https://vogelino.com/inspirations/${item.id}`}
+        content={`https://vogelino.com/cool-sites/${item.id}`}
         icon={{
           source: Icon.CopyClipboard,
           tintColor: "#E30001",

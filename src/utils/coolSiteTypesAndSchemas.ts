@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const inspirationSchema = z.object({
+export const coolSiteSchema = z.object({
   id: z.string(),
   title: z.string(),
   url: z.string().url(),
@@ -9,11 +9,11 @@ export const inspirationSchema = z.object({
   date: z.string(),
   tags: z.string().array().default([]),
 });
-export type InspirationType = z.infer<typeof inspirationSchema>;
+export type CoolSiteType = z.infer<typeof coolSiteSchema>;
 
-export const inspirationInsertSchema = z.object({
+export const coolSiteInsertSchema = z.object({
   name: z.string(),
   url: z.string().url(),
   tags: z.string().array().default([]),
 });
-export type InspirationInsertType = z.infer<typeof inspirationInsertSchema>;
+export type CoolSiteInsertType = z.infer<typeof coolSiteInsertSchema>;
