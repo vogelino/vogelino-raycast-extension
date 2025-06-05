@@ -30,7 +30,11 @@ function ViewCoolSite(item: CoolSiteType) {
             text={`${url.hostname.replace(/^(www\.)?/, "")}${url.pathname.replace(/\/$/, "")}`}
             target={item.url}
           />
-          <Detail.Metadata.Link title="Portfolio Link" text={`${item.id}`} target="https://vogelino.com/coolSites" />
+          <Detail.Metadata.Link
+            title="Portfolio Link"
+            text={`${item.id}`}
+            target="https://lucasvogel.click/coolSites"
+          />
           <Detail.Metadata.Separator />
           <Detail.Metadata.TagList title="Tags">
             {item.tags.map((tag) => (

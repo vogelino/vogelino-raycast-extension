@@ -6,7 +6,7 @@ const { githubAuthToken } = getPreferenceValues<Preferences>();
 
 export async function addCoolSite(values: CoolSiteInsertType) {
   return axios.post(
-    "https://api.github.com/repos/vogelino/vogelino/dispatches",
+    "https://api.github.com/repos/vogelino/vogelino-portfolio/dispatches",
     {
       event_type: "update-cool-site",
       client_payload: values,

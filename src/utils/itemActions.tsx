@@ -32,14 +32,14 @@ function ItemActions({
         shortcut={{ modifiers: ["opt", "shift"], key: "enter" }}
       />
       <Action.OpenInBrowser
-        url={`https://vogelino.com/cool-sites/${item.id}`}
+        url={`https://lucasvogel.click/cool-sites/${item.id}`}
         title="Open in Portfolio"
-        icon={`https://vogelino.com/favicon-32x32.png`}
+        icon={`https://lucasvogel.click/favicon-32x32.png`}
         shortcut={{ modifiers: ["shift"], key: "enter" }}
       />
       <Action.CopyToClipboard
         title="Copy Portfolio Link"
-        content={`https://vogelino.com/cool-sites/${item.id}`}
+        content={`https://lucasvogel.click/cool-sites/${item.id}`}
         icon={{
           source: Icon.CopyClipboard,
           tintColor: "#E30001",

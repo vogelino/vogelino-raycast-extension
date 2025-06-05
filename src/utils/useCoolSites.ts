@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { CoolSiteType, coolSiteSchema } from "./coolSiteTypesAndSchemas";
 
 export function useCoolSites() {
-  const { error, data } = useFetch("https://vogelino.com/api/cool-sites.json", {
+  const { error, data } = useFetch("https://lucasvogel.click/api/cool-sites.json", {
     headers: { "content-type": "application/json" },
   });
   const [tags, setTags] = useState<string[]>([]);
