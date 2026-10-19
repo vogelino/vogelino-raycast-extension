@@ -1,23 +1,24 @@
 import { getPreferenceValues } from "@raycast/api";
-import axios from "axios";
 import { CoolSiteInsertType } from "./coolSiteTypesAndSchemas";
 
-const { githubAuthToken } = getPreferenceValues<Preferences>();
-
 export async function addCoolSite(values: CoolSiteInsertType) {
-  return axios.post(
-    "https://api.github.com/repos/vogelino/vogelino-portfolio/dispatches",
-    {
+  const { githubAuthToken } = getPreferenceValues<Preferences>();
+  const response = await fetch("https://api.github.com/repos/vogelino/vogelino-portfolio/dispatches", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${githubAuthToken}`,
+      Accept: "application/vnd.github+json",
+      "Content-Type": "application/json",
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+    body: JSON.stringify({
       event_type: "update-cool-site",
       client_payload: values,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${githubAuthToken}`,
-        "Content-Type": "application/json",
-        Accept: "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-    },
-  );
+    }),
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(message || `GitHub returned ${response.status} ${response.statusText}`);
+  }
 }

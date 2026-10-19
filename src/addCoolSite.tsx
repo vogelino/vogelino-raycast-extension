@@ -1,5 +1,4 @@
-import { Action, ActionPanel, Form, Icon, Toast, showToast } from "@raycast/api";
-import dotenv from "dotenv";
+import { Action, ActionPanel, Form, Icon, Keyboard, Toast, showToast, useNavigation } from "@raycast/api";
 import { useEffect, useState } from "react";
 import ListCoolSitesCommand from "./index";
 import { addCoolSite } from "./utils/addCoolSite";
@@ -7,29 +6,61 @@ import CommonActions from "./utils/commonActions";
 import { CoolSiteInsertType, coolSiteInsertSchema } from "./utils/coolSiteTypesAndSchemas";
 import { getArcTabUrlAndTitle } from "./utils/getArcTabUrlAndTitle";
 import { useCoolSites } from "./utils/useCoolSites";
-dotenv.config();
 
 export default function Command() {
   const { tags } = useCoolSites();
+  const { pop } = useNavigation();
   const [url, setUrl] = useState<string>("");
   const [name, setName] = useState<string>("");
 
   useEffect(() => {
-    getArcTabUrlAndTitle().then(({ tabURL, tabTitle }) => {
-      if (tabURL) setUrl(tabURL);
-      if (tabTitle) setName(tabTitle);
-    });
+    getArcTabUrlAndTitle()
+      .then(({ tabURL, tabTitle }) => {
+        if (tabURL) setUrl(tabURL);
+        if (tabTitle) setName(tabTitle);
+      })
+      .catch(() => {
+        // Arc is optional; leave the fields empty when it is unavailable.
+      });
   }, []);
+
+  async function handleSubmit(values: CoolSiteInsertType) {
+    const parsedValues = coolSiteInsertSchema.safeParse(values);
+    if (!parsedValues.success) {
+      await showToast({
+        style: Toast.Style.Failure,
+        title: "Could Not Add Cool Site",
+        message: parsedValues.error.issues[0]?.message,
+      });
+      return;
+    }
+
+    const toast = await showToast({
+      style: Toast.Style.Animated,
+      title: `Adding ${parsedValues.data.name}`,
+    });
+
+    try {
+      await addCoolSite(parsedValues.data);
+      toast.style = Toast.Style.Success;
+      toast.title = `Added ${parsedValues.data.name}`;
+      pop();
+    } catch (error) {
+      toast.style = Toast.Style.Failure;
+      toast.title = `Could Not Add ${parsedValues.data.name}`;
+      toast.message = error instanceof Error ? error.message : String(error);
+    }
+  }
 
   return (
     <Form
       actions={
         <ActionPanel>
-          <Action.SubmitForm onSubmit={handleSubmit} icon={Icon.Check} />
+          <Action.SubmitForm title="Add Cool Site" onSubmit={handleSubmit} icon={Icon.Plus} />
           <Action.Push
             title="See All Cool Sites"
             icon={Icon.List}
-            shortcut={{ modifiers: ["cmd"], key: "l" }}
+            shortcut={Keyboard.Shortcut.Common.Open}
             target={<ListCoolSitesCommand />}
           />
           <CommonActions />
@@ -57,31 +88,4 @@ export default function Command() {
       </Form.TagPicker>
     </Form>
   );
-}
-
-async function handleSubmit(values: CoolSiteInsertType) {
-  const parsedValues = coolSiteInsertSchema.parse(values);
-
-  const toast = await showToast({
-    style: Toast.Style.Animated,
-    title: `Adding Cool Site: ${parsedValues.name}`,
-  });
-  try {
-    const response = await addCoolSite(parsedValues);
-
-    if (response.status !== 204) {
-      toast.style = Toast.Style.Failure;
-      toast.title = `Failed to Add Cool Site: ${parsedValues.name}`;
-      toast.message = response.statusText;
-    }
-
-    showToast({ title: `Cool Site Added: ${parsedValues.name}` });
-    toast.style = Toast.Style.Success;
-    toast.title = `Cool Site Added: ${parsedValues.name}`;
-  } catch (error) {
-    console.error(error);
-    toast.style = Toast.Style.Failure;
-    toast.title = `Failed to Add Cool Site: ${parsedValues.name}`;
-    toast.message = (error as Error).message;
-  }
 }

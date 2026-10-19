@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Icon } from "@raycast/api";
+import { Action, ActionPanel, Icon, Keyboard } from "@raycast/api";
 import AddCoolSiteCommand from "../addCoolSite";
 import ViewCoolSite from "../viewCoolSite";
 import { CoolSiteType } from "./coolSiteTypesAndSchemas";
@@ -15,36 +15,37 @@ function ItemActions({
   return (
     <ActionPanel.Section title="Item Actions">
       {showViewCoolSiteCommand && (
-        <Action.Push title="View Cool Site" icon={{ source: Icon.Eye }} target={<ViewCoolSite {...item} />} />
+        <Action.Push title="View Cool Site" icon={Icon.Eye} target={<ViewCoolSite item={item} />} />
       )}
       {showAddCoolSiteCommand && (
         <Action.Push
           title="Add Cool Site"
-          icon={{ source: Icon.Plus }}
-          shortcut={{ modifiers: ["cmd"], key: "n" }}
+          icon={Icon.Plus}
+          shortcut={Keyboard.Shortcut.Common.New}
           target={<AddCoolSiteCommand />}
         />
       )}
-      <Action.OpenInBrowser url={item.url} title="Open External Link" shortcut={{ modifiers: ["opt"], key: "enter" }} />
+      <Action.OpenInBrowser
+        url={item.url}
+        title="Open External Link"
+        icon={Icon.Globe}
+        shortcut={Keyboard.Shortcut.Common.Open}
+      />
       <Action.CopyToClipboard
         title="Copy External Link"
         content={item.url}
-        shortcut={{ modifiers: ["opt", "shift"], key: "enter" }}
+        icon={Icon.CopyClipboard}
+        shortcut={Keyboard.Shortcut.Common.Copy}
       />
       <Action.OpenInBrowser
         url={`https://lucasvogel.click/cool-sites/${item.id}`}
         title="Open in Portfolio"
         icon={`https://lucasvogel.click/favicon-32x32.png`}
-        shortcut={{ modifiers: ["shift"], key: "enter" }}
       />
       <Action.CopyToClipboard
         title="Copy Portfolio Link"
         content={`https://lucasvogel.click/cool-sites/${item.id}`}
-        icon={{
-          source: Icon.CopyClipboard,
-          tintColor: "#E30001",
-        }}
-        shortcut={{ modifiers: ["cmd", "shift"], key: "enter" }}
+        icon={Icon.CopyClipboard}
       />
     </ActionPanel.Section>
   );

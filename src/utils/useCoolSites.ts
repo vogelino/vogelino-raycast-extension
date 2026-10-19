@@ -1,40 +1,21 @@
-import { Toast, showToast } from "@raycast/api";
 import { useFetch } from "@raycast/utils";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { CoolSiteType, coolSiteSchema } from "./coolSiteTypesAndSchemas";
 
 export function useCoolSites() {
-  const { error, data } = useFetch("https://lucasvogel.click/api/cool-sites.json", {
-    headers: { "content-type": "application/json" },
-  });
-  const [tags, setTags] = useState<string[]>([]);
-  const [coolSites, setCoolSites] = useState<CoolSiteType[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { data, error, isLoading, revalidate } = useFetch<CoolSiteType[]>(
+    "https://lucasvogel.click/api/cool-sites.json",
+    {
+      headers: { "content-type": "application/json" },
+      parseResponse: async (response) => coolSiteSchema.array().parse(await response.json()),
+      keepPreviousData: true,
+    },
+  );
+  const coolSites = useMemo(
+    () => Array.from(new Map<string, CoolSiteType>((data ?? []).map((site) => [site.id, site])).values()),
+    [data],
+  );
+  const tags = useMemo(() => Array.from(new Set(coolSites.flatMap((site) => site.tags))).sort(), [coolSites]);
 
-  useEffect(() => {
-    if (!data) return;
-    try {
-      const insps = Array.from(
-        coolSiteSchema
-          .array()
-          .parse(data)
-          .reduce((acc, insp) => {
-            acc.set(insp.id, insp);
-            return acc;
-          }, new Map<string, CoolSiteType>())
-          .values(),
-      );
-      const tags = Array.from(new Set<string>(insps.flatMap((i) => i.tags)));
-      setTags(tags);
-      setCoolSites(insps);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [data]);
-
-  error && showToast({ title: error.message, style: Toast.Style.Failure });
-
-  return { coolSites, tags, isLoading };
+  return { coolSites, tags, isLoading, error, revalidate };
 }

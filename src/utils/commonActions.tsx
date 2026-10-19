@@ -4,13 +4,13 @@ function CommonActions() {
   return (
     <ActionPanel.Section title="Common Actions">
       <Action.OpenInBrowser
-        title="Show GitHub Actions"
+        title="Open GitHub Actions"
         url="https://github.com/vogelino/vogelino-portfolio/actions"
         icon={Icon.Cog}
         shortcut={{ modifiers: ["opt"], key: "a" }}
       />
       <Action.OpenInBrowser
-        title="Show Vercel Deployments"
+        title="Open Vercel Deployments"
         url="https://vercel.com/vogelinos-projects/vogelino-svelte/deployments"
         icon={Icon.Cloud}
         shortcut={{ modifiers: ["opt"], key: "v" }}

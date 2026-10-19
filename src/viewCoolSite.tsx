@@ -3,11 +3,11 @@ import CommonActions from "./utils/commonActions";
 import { CoolSiteType } from "./utils/coolSiteTypesAndSchemas";
 import ItemActions from "./utils/itemActions";
 
-function ViewCoolSite(item: CoolSiteType) {
+function ViewCoolSite({ item }: { item: CoolSiteType }) {
   const url = new URL(item.url);
   return (
     <Detail
-      markdown={`<img src="${item.thumbnail}" width="560" />`}
+      markdown={item.thumbnail ? `![${item.title}](${item.thumbnail})` : `# ${item.title}`}
       actions={
         <ActionPanel>
           <ItemActions item={item} showViewCoolSiteCommand={false} />
@@ -16,14 +16,7 @@ function ViewCoolSite(item: CoolSiteType) {
       }
       metadata={
         <Detail.Metadata>
-          <Detail.Metadata.Label
-            title="Name"
-            text={item.title}
-            icon={
-              item.favicon ||
-              `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=24&url=${item.url}`
-            }
-          />
+          <Detail.Metadata.Label title="Name" text={item.title} icon={item.favicon || undefined} />
           <Detail.Metadata.Separator />
           <Detail.Metadata.Link
             title="External Link"
@@ -33,7 +26,7 @@ function ViewCoolSite(item: CoolSiteType) {
           <Detail.Metadata.Link
             title="Portfolio Link"
             text={`${item.id}`}
-            target="https://lucasvogel.click/coolSites"
+            target={`https://lucasvogel.click/cool-sites/${item.id}`}
           />
           <Detail.Metadata.Separator />
           <Detail.Metadata.TagList title="Tags">

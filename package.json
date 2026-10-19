@@ -1,33 +1,31 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "vogelino-extension",
-  "title": "Vogelino Utils",
-  "description": "Utilities to see and add cool sites to vogelino's portfolio.",
+  "title": "Vogelino Cool Sites",
+  "description": "Browse and add cool sites featured in Vogelino's portfolio.",
   "icon": "extension-icon.png",
   "author": "vogelino",
-  "owner": "vogelino-spa",
+  "platforms": [
+    "macOS"
+  ],
   "categories": [
-    "Data",
-    "Developer Tools",
-    "Fun",
-    "Web",
-    "Productivity"
+    "Web"
   ],
   "license": "MIT",
   "commands": [
     {
       "name": "addCoolSite",
       "title": "Add Cool Site",
-      "subtitle": "Add a cool site to vogelino's portfolio.",
-      "description": "Add a cool site to vogelino's portfolio by providing an URL, Name and a list of coma-separated tags.",
+      "subtitle": "Vogelino Portfolio",
+      "description": "Add a cool site to the Vogelino portfolio.",
       "mode": "view",
       "icon": "add-command.png"
     },
     {
       "name": "index",
-      "title": "Search/List Cool Sites",
-      "subtitle": "List and search throught vogelino's portfolio Cool Sites.",
-      "description": "List and search throught vogelino's portfolio Cool Sites.",
+      "title": "Search Cool Sites",
+      "subtitle": "Vogelino Portfolio",
+      "description": "Search and browse cool sites featured in the Vogelino portfolio.",
       "mode": "view",
       "icon": "list-command.png"
     }
@@ -35,26 +33,28 @@
   "preferences": [
     {
       "name": "githubAuthToken",
-      "title": "GitHub Auth Token",
-      "description": "Get your Auth Token here https://github.com/settings/tokens",
+      "title": "GitHub Personal Access Token",
+      "description": "Token used to dispatch the portfolio update workflow.",
       "type": "password",
-      "required": true
+      "required": true,
+      "placeholder": "github_pat_…"
     }
   ],
   "dependencies": {
-    "@raycast/api": "1.75.2",
-    "@raycast/utils": "1.15.0",
-    "axios": "1.7.2",
-    "dotenv": "16.4.5",
-    "zod": "3.23.8"
+    "@raycast/api": "2.8.2",
+    "@raycast/utils": "2.3.3",
+    "zod": "4.6.7"
   },
   "devDependencies": {
-    "@raycast/eslint-config": "1.0.6",
-    "@types/node": "20.8.10",
-    "@types/react": "18.2.27",
-    "eslint": "8.51.0",
-    "prettier": "3.0.3",
-    "typescript": "5.2.2"
+    "@raycast/eslint-config": "2.2.0",
+    "@types/node": "22.19.17",
+    "@types/react": "19.0.10",
+    "eslint": "10.8.0",
+    "prettier": "3.9.6",
+    "typescript": "6.0.3"
+  },
+  "engines": {
+    "node": ">=22.22.2"
   },
   "scripts": {
     "build": "ray build -e dist",

@@ -1,14 +1,15 @@
-import { exec } from "child_process";
+import { runAppleScript } from "@raycast/utils";
 
-export function getArcTabUrlAndTitle(): Promise<{ tabURL: string; tabTitle: string }> {
-  return new Promise((resolve, reject) => {
-    exec(
-      "osascript -e 'tell application \"Arc\" to set {tabURL, tabTitle} to {URL, title} of active tab of front window'",
-      (error, stdout) => {
-        if (error) return reject(error);
-        const [tabURL, tabTitle] = stdout.trim().split(",");
-        return resolve({ tabURL: tabURL.trim(), tabTitle: tabTitle.trim() });
-      },
-    );
-  });
+export async function getArcTabUrlAndTitle(): Promise<{ tabURL: string; tabTitle: string }> {
+  const output = await runAppleScript(`
+    if application "Arc" is not running then return ""
+
+    tell application "Arc"
+      set activeTab to active tab of front window
+      return (URL of activeTab) & linefeed & (title of activeTab)
+    end tell
+  `);
+  const [tabURL = "", ...titleParts] = output.trim().split("\n");
+
+  return { tabURL: tabURL.trim(), tabTitle: titleParts.join("\n").trim() };
 }
