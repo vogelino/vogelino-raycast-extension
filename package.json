@@ -14,8 +14,16 @@
   "license": "MIT",
   "commands": [
     {
+      "name": "quickAddCoolSite",
+      "title": "Quick Add Cool Site",
+      "subtitle": "Vogelino Portfolio",
+      "description": "Add the current browser tab with automatically generated metadata.",
+      "mode": "no-view",
+      "icon": "add-command.png"
+    },
+    {
       "name": "addCoolSite",
-      "title": "Add Cool Site",
+      "title": "Add Cool Site with Review",
       "subtitle": "Vogelino Portfolio",
       "description": "Add a cool site to the Vogelino portfolio.",
       "mode": "view",
@@ -33,10 +41,10 @@
   "preferences": [
     {
       "name": "githubAuthToken",
-      "title": "GitHub Personal Access Token",
-      "description": "Token used to dispatch the portfolio update workflow.",
+      "title": "GitHub Token Fallback",
+      "description": "Optional fallback when the GitHub CLI is unavailable or signed out.",
       "type": "password",
-      "required": true,
+      "required": false,
       "placeholder": "github_pat_…"
     }
   ],

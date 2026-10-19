@@ -19,7 +19,7 @@ function ItemActions({
       )}
       {showAddCoolSiteCommand && (
         <Action.Push
-          title="Add Cool Site"
+          title="Add Cool Site with Review"
           icon={Icon.Plus}
           shortcut={Keyboard.Shortcut.Common.New}
           target={<AddCoolSiteCommand />}

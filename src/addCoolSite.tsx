@@ -1,36 +1,73 @@
 import { Action, ActionPanel, Form, Icon, Keyboard, Toast, showToast, useNavigation } from "@raycast/api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ListCoolSitesCommand from "./index";
 import { addCoolSite } from "./utils/addCoolSite";
 import CommonActions from "./utils/commonActions";
 import { CoolSiteInsertType, coolSiteInsertSchema } from "./utils/coolSiteTypesAndSchemas";
-import { getArcTabUrlAndTitle } from "./utils/getArcTabUrlAndTitle";
+import { enrichCoolSite } from "./utils/enrichCoolSite";
+import { CurrentBrowserPage, getCurrentBrowserPage } from "./utils/getCurrentBrowserPage";
+import { normalizeCoolSiteTitle, normalizeCoolSiteUrl } from "./utils/normalizeCoolSite";
 import { useCoolSites } from "./utils/useCoolSites";
 
 export default function Command() {
-  const { tags } = useCoolSites();
+  const { coolSites, tags } = useCoolSites();
   const { pop } = useNavigation();
   const [url, setUrl] = useState<string>("");
   const [name, setName] = useState<string>("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [page, setPage] = useState<CurrentBrowserPage | null>(null);
+  const hasEnriched = useRef(false);
 
   useEffect(() => {
-    getArcTabUrlAndTitle()
-      .then(({ tabURL, tabTitle }) => {
-        if (tabURL) setUrl(tabURL);
-        if (tabTitle) setName(tabTitle);
+    getCurrentBrowserPage()
+      .then((currentPage) => {
+        const normalizedTitle = normalizeCoolSiteTitle(currentPage.title);
+        if (currentPage.url) setUrl(normalizeCoolSiteUrl(currentPage.url));
+        if (normalizedTitle) setName(normalizedTitle);
+        setPage(currentPage);
       })
       .catch(() => {
-        // Arc is optional; leave the fields empty when it is unavailable.
+        // Browser integration is optional; leave the fields empty when it is unavailable.
       });
   }, []);
 
+  useEffect(() => {
+    if (!page || tags.length === 0 || hasEnriched.current) return;
+    hasEnriched.current = true;
+    const initialTitle = normalizeCoolSiteTitle(page.title);
+    void enrichCoolSite({ title: initialTitle, content: page.content, knownTags: tags }).then((enriched) => {
+      setName((current) => (current === initialTitle ? enriched.title : current));
+      setSelectedTags(enriched.tags);
+    });
+  }, [page, tags]);
+
   async function handleSubmit(values: CoolSiteInsertType) {
-    const parsedValues = coolSiteInsertSchema.safeParse(values);
+    let normalizedUrl = values.url;
+    try {
+      normalizedUrl = normalizeCoolSiteUrl(values.url);
+    } catch {
+      // Let the schema below provide the form's validation message.
+    }
+    const parsedValues = coolSiteInsertSchema.safeParse({
+      ...values,
+      name: normalizeCoolSiteTitle(values.name),
+      url: normalizedUrl,
+    });
     if (!parsedValues.success) {
       await showToast({
         style: Toast.Style.Failure,
         title: "Could Not Add Cool Site",
         message: parsedValues.error.issues[0]?.message,
+      });
+      return;
+    }
+
+    const duplicate = coolSites.find((site) => normalizeCoolSiteUrl(site.url) === parsedValues.data.url);
+    if (duplicate) {
+      await showToast({
+        style: Toast.Style.Failure,
+        title: "Site Already Saved",
+        message: normalizeCoolSiteTitle(duplicate.title),
       });
       return;
     }
@@ -43,7 +80,7 @@ export default function Command() {
     try {
       await addCoolSite(parsedValues.data);
       toast.style = Toast.Style.Success;
-      toast.title = `Added ${parsedValues.data.name}`;
+      toast.title = `Queued ${parsedValues.data.name}`;
       pop();
     } catch (error) {
       toast.style = Toast.Style.Failure;
@@ -81,7 +118,13 @@ export default function Command() {
         value={url}
         onChange={(value) => setUrl(value)}
       />
-      <Form.TagPicker id="tags" title="Tags" placeholder="Enter the Cool Site Tags">
+      <Form.TagPicker
+        id="tags"
+        title="Tags"
+        placeholder="Enter the Cool Site Tags"
+        value={selectedTags}
+        onChange={setSelectedTags}
+      >
         {tags.map((tag) => (
           <Form.TagPicker.Item key={tag} value={tag} title={tag} />
         ))}

@@ -5,8 +5,8 @@ export async function getArcTabUrlAndTitle(): Promise<{ tabURL: string; tabTitle
     if application "Arc" is not running then return ""
 
     tell application "Arc"
-      set activeTab to active tab of front window
-      return (URL of activeTab) & linefeed & (title of activeTab)
+      if (count of windows) is 0 then return ""
+      return (URL of active tab of front window) & linefeed & (title of active tab of front window)
     end tell
   `);
   const [tabURL = "", ...titleParts] = output.trim().split("\n");
